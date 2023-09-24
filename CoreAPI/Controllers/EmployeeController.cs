@@ -28,5 +28,12 @@ namespace CoreAPI.Controllers
             Employee employee = _employeeRepository.GetById(id);
             return Ok(employee);
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Employee employee)
+        {
+            int id = _employeeRepository.Add(employee);
+            return Ok(id);
+        }
     }
 }

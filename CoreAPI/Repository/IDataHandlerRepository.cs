@@ -4,8 +4,8 @@
     {
         Task<IEnumerable<TEntity>> GetAll();
         TEntity GetById(int id);
-        void Add(TEntity entity);
-        void Delete(TEntity entity);
-        void Update(TEntity targetEntity,TEntity entity);
+        int Add(TEntity entity);
+        int Delete(TEntity entity);
+        int Update(TEntity targetEntity,TEntity entity);
     }
 }

@@ -1,43 +1,73 @@
 ﻿using CoreAPI.Repository;
+using CoreAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoreAPI.Model.DataHandler
 {
     public class EmployeeHandler:IDataHandlerRepository<Employee>
     {
-        private readonly EmployeeContext employeeContext_context;
+        private readonly EmployeeContext _employeeContext;
+        private UserLoginHandler _userLoginHandler;
 
         public EmployeeHandler(EmployeeContext employeeContext)
         {
-            employeeContext_context = employeeContext;
+            _employeeContext = employeeContext;
+            _userLoginHandler = new UserLoginHandler(employeeContext);
         }
 
-        public void Add(Employee entity)
+        public int Add(Employee entity)
         {
-            throw new NotImplementedException();
+            using var transaction = _employeeContext.Database.BeginTransaction();
+            try
+            {
+                _employeeContext.Employees.Add(entity);
+                _employeeContext.SaveChanges();
+                transaction.Commit();
+
+                if (entity.EmployeeId > 0)
+                {
+                    string rawPassword,hashPassword = "";
+                    AuthService.GeneratePassword(out rawPassword,out hashPassword);
+
+                    //create user account
+                    UserLogin userLogin = new UserLogin
+                    {
+                        Username = entity.EmailAddress,
+                        Password = hashPassword,
+                        EmployeeDetail = entity 
+                    };
+
+                    var userId = _userLoginHandler.Add(userLogin);
+                    return userId;
+                }
+                else
+                {
+                    return 0;
+                }             
+
+            }catch(Exception ex) { transaction.Rollback(); return 0; }
         }
 
-        public void Delete(Employee entity)
+        public int Delete(Employee entity)
         {
             throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Employee>> GetAll()
         {
-            return await employeeContext_context.Employees.ToListAsync();
-
+            return await _employeeContext.Employees.ToListAsync();
         }
 
         public Employee GetById(int id)
         {
-            return employeeContext_context.Employees.FirstOrDefault(
+            return _employeeContext.Employees.FirstOrDefault(
                 a=>a.EmployeeId == id
                 );
         }
 
-        public void Update(Employee targetEntity, Employee entity)
+        public int Update(Employee targetEntity, Employee entity)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
