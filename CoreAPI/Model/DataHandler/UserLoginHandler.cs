@@ -1,9 +1,11 @@
 ﻿using CoreAPI.Repository;
+using CoreAPI.Services;
+using Microsoft.Extensions.Configuration;
 using System.Transactions;
 
 namespace CoreAPI.Model.DataHandler
 {
-    public class UserLoginHandler : IDataHandlerRepository<UserLogin>
+    public class UserLoginHandler : IUserLoginHandlerRepository<UserLogin>
     {
         readonly EmployeeContext _employeeContext;
 
@@ -28,22 +30,12 @@ namespace CoreAPI.Model.DataHandler
             }
         }
 
-        public int Delete(UserLogin entity)
+        public Token GetToken(UserLogin entity, IConfiguration configuration)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UserLogin>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserLogin GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Update(UserLogin targetEntity, UserLogin entity)
+        public UserLogin GetUserDetail(UserLogin entity)
         {
             throw new NotImplementedException();
         }

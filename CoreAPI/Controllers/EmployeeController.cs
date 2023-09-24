@@ -1,5 +1,6 @@
 ﻿using CoreAPI.Model;
 using CoreAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreAPI.Controllers
@@ -16,6 +17,7 @@ namespace CoreAPI.Controllers
         }
 
         [HttpGet("GetAllEmployees")]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> Get()
         {
             var employees = await _employeeRepository.GetAll();
@@ -23,6 +25,7 @@ namespace CoreAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles ="Admin,Employee")]
         public IActionResult GetEmployee(int id)
         {
             Employee employee = _employeeRepository.GetById(id);
@@ -30,6 +33,7 @@ namespace CoreAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Post([FromBody] Employee employee)
         {
             int id = _employeeRepository.Add(employee);

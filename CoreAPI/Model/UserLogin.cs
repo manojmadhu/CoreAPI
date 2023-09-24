@@ -13,7 +13,7 @@ namespace CoreAPI.Model
         public string? Username { get; set; }
         [Required]
         public string? Password { get; set; }
-
+        public string UserRole { get; set; }
         [ForeignKey("EmployeeId")]
         public Employee EmployeeDetail { get; set; }
     }

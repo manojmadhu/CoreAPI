@@ -1,4 +1,5 @@
-﻿using CoreAPI.Repository;
+﻿using CoreAPI.Common;
+using CoreAPI.Repository;
 using CoreAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,7 @@ namespace CoreAPI.Model.DataHandler
                     {
                         Username = entity.EmailAddress,
                         Password = hashPassword,
+                        UserRole = Enum.GetName(typeof(UserRole), UserRole.Employee),
                         EmployeeDetail = entity 
                     };
 
